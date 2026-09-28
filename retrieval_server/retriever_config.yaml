@@ -1,0 +1,8 @@
+gpu_id: "0,1"
+retrieval_method: "dense"
+retrieval_model_path: "/home/zdw2200170271/llm/models/e5-base-v2"
+index_path: "/home/zdw2200170271/llm/datasets/retrieval-corpus/e5_flat_inner.index"
+corpus_path: "/home/zdw2200170271/llm/datasets/retrieval-corpus/wiki18_100w.jsonl"
+retrieval_topk: 5
+retrieval_batch_size: 128
+faiss_gpu: True

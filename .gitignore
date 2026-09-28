@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+
+# Project outputs
+outputs/
+logs/
+retrieval_server/output/
+
+# Tools / editors
+.omo/
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+
+# Logs
+*.log
