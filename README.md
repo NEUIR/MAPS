@@ -10,7 +10,6 @@ de-duplicates the retrieved evidence, and then jointly produces (i) refined
 information.
 trajectory self-corrects over rounds instead of drifting.
 
-
 ---
 
 ## 🎯 Method Overview
@@ -40,7 +39,7 @@ $$
 ### Refinement distillation
 
 $$
-o_t,\; \tilde{r}_t = M_{\mathrm{Refine}}\left(q_0, \{s^1_t, \dots, s^N_t\}, Q_t, D_t, O_{t-1}, \tilde{r}_{t-1}\right)
+o_t, \tilde{r}_t = M_{\mathrm{Refine}}\left(q_0, \{s^1_t, \dots, s^N_t\}, Q_t, D_t, O_{t-1}, \tilde{r}_{t-1}\right)
 $$
 
 The refine agent returns the knowledge observation $o_t$
@@ -153,28 +152,28 @@ The output directory is derived from the input path as
 `outputs/maps/<model>/<dataset>/<n>/`, where `<n>` auto-increments so repeated runs
 never overwrite each other. Unless `--result_file` is given, the runner writes:
 
-| File | Contents |
-|---|---|
+| File              | Contents                                                                                                                              |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
 | `<dataset>.jsonl` | One record per sample: `index`, `question`, `golden_answers`, `predicted_answer_in_tag`, `pipeline_result` (full per-iteration trace) |
-| `config.json` | Snapshot of the CLI arguments |
-| `run.log` | Run log |
+| `config.json`     | Snapshot of the CLI arguments                                                                                                         |
+| `run.log`         | Run log                                                                                                                               |
 
 ---
 
 ## 🛠️ Key CLI Options
 
-| Option | Default | Description |
-|---|---|---|
-| `--input_file` | required | Input JSONL test file |
-| `--openai_base_url` | `http://127.0.0.1:8001` | Shared OpenAI-compatible endpoint |
-| `--model` | — | Shared model name |
-| `--retriever_base_url` | `http://127.0.0.1:9100` | Retrieval service endpoint |
-| `--retriever_top_k` | `5` | Documents retrieved per query |
-| `--max_iterations` | `5` | Maximum intent/refine rounds |
-| `--batch_size` | `512` | Samples processed per batch |
-| `--num_samples` | all | Truncate the input to the first N samples |
-| `--use_chat_template` | off | Render prompts with the tokenizer chat template |
-| `--enable_thinking` | off | Enable thinking mode (e.g. Qwen3) |
+| Option                 | Default                 | Description                                     |
+| ---------------------- | ----------------------- | ----------------------------------------------- |
+| `--input_file`         | required                | Input JSONL test file                           |
+| `--openai_base_url`    | `http://127.0.0.1:8001` | Shared OpenAI-compatible endpoint               |
+| `--model`              | —                       | Shared model name                               |
+| `--retriever_base_url` | `http://127.0.0.1:9100` | Retrieval service endpoint                      |
+| `--retriever_top_k`    | `5`                     | Documents retrieved per query                   |
+| `--max_iterations`     | `5`                     | Maximum intent/refine rounds                    |
+| `--batch_size`         | `512`                   | Samples processed per batch                     |
+| `--num_samples`        | all                     | Truncate the input to the first N samples       |
+| `--use_chat_template`  | off                     | Render prompts with the tokenizer chat template |
+| `--enable_thinking`    | off                     | Enable thinking mode (e.g. Qwen3)               |
 
 Per-agent overrides follow the pattern
 `--{intent_agent,query_agent,refine_agent}_{model,openai_base_url,openai_api_key,model_path,max_tokens,temperature,top_p,llm_timeout,use_chat_template,enable_thinking}`,
@@ -231,10 +230,10 @@ The benchmark datasets, the Wikipedia retrieval corpus and a **prebuilt FAISS
 index** all ship in the same [FlashRAG](https://github.com/RUC-NLPIR/FlashRAG)
 dataset repository, under `retrieval-corpus/`:
 
-| File | Contents |
-|---|---|
+| File                                   | Contents                                                          |
+| -------------------------------------- | ----------------------------------------------------------------- |
 | `retrieval-corpus/e5_flat_inner.index` | FAISS inner-product index over the corpus (built with e5-base-v2) |
-| `retrieval-corpus/wiki18_100w.zip` | zipped `wiki18_100w.jsonl`, the ~18M-passage Wikipedia corpus |
+| `retrieval-corpus/wiki18_100w.zip`     | zipped `wiki18_100w.jsonl`, the ~18M-passage Wikipedia corpus     |
 
 - Hugging Face — <https://huggingface.co/datasets/RUC-NLPIR/FlashRAG_datasets/tree/main/retrieval-corpus>
 - ModelScope — <https://www.modelscope.cn/datasets/RUC-NLPIR/FlashRAG_datasets/tree/master/retrieval-corpus>
@@ -280,7 +279,6 @@ MAPS is evaluated with two Qwen3 backbones:
 
 ---
 
-
 ## ⚖️ License
 
 Released under the [MIT License](LICENSE).
@@ -289,10 +287,9 @@ Released under the [MIT License](LICENSE).
 
 ## 🔗 Relevant Resources
 
-| Resource | Hugging Face | ModelScope |
-|---|---|---|
+| Resource                                                        | Hugging Face                                                  | ModelScope                                                       |
+| --------------------------------------------------------------- | ------------------------------------------------------------- | ---------------------------------------------------------------- |
 | FlashRAG datasets (benchmark data + Wikipedia retrieval corpus) | <https://huggingface.co/datasets/RUC-NLPIR/FlashRAG_datasets> | <https://www.modelscope.cn/datasets/RUC-NLPIR/FlashRAG_datasets> |
-| Embedding model — e5-base-v2 | <https://huggingface.co/intfloat/e5-base-v2> | <https://www.modelscope.cn/models/intfloat/e5-base-v2> |
-| Backbone model — Qwen3-32B | <https://huggingface.co/Qwen/Qwen3-32B> | <https://www.modelscope.cn/models/Qwen/Qwen3-32B> |
-| Backbone model — Qwen3.6-35B-A3B | <https://huggingface.co/Qwen/Qwen3.6-35B-A3B> | <https://www.modelscope.cn/models/Qwen/Qwen3.6-35B-A3B> |
-
+| Embedding model — e5-base-v2                                    | <https://huggingface.co/intfloat/e5-base-v2>                  | <https://www.modelscope.cn/models/intfloat/e5-base-v2>           |
+| Backbone model — Qwen3-32B                                      | <https://huggingface.co/Qwen/Qwen3-32B>                       | <https://www.modelscope.cn/models/Qwen/Qwen3-32B>                |
+| Backbone model — Qwen3.6-35B-A3B                                | <https://huggingface.co/Qwen/Qwen3.6-35B-A3B>                 | <https://www.modelscope.cn/models/Qwen/Qwen3.6-35B-A3B>          |
