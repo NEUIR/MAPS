@@ -88,7 +88,7 @@ bash scripts/retrieval_server.sh
 Serve a model with vLLM (see `scripts/vllm_server.sh` for example commands):
 
 ```bash
-CUDA_VISIBLE_DEVICES=2,3,4,5 vllm serve <MODEL> --port 9101 -tp 4 -dp 1 \
+CUDA_VISIBLE_DEVICES="2,3,4,5" vllm serve <MODEL> --port 9101 -tp 4 -dp 1 \
   --gpu-memory-utilization 0.7 --api-key TEST
 ```
 
@@ -116,28 +116,6 @@ Or run the whole suite:
 bash scripts/run_maps_all.sh
 ```
 
-Or boot the vLLM + retrieval servers and run an experiment in one shot. Every
-setting can be given as an environment variable (default) or as a CLI flag
-(which overrides it):
-
-```bash
-# run with the defaults
-bash scripts/pipeline.sh
-
-# override model / port / GPUs
-bash scripts/pipeline.sh --model Qwen3.6-35B-A3B --port 9101 --gpu-ids "4,5,6,7"
-
-# skip a server that is already running elsewhere
-bash scripts/pipeline.sh --no-vllm
-
-bash scripts/pipeline.sh --help
-```
-
-`pipeline.sh` reuses `scripts/retrieval_server.sh` for the retrieval service and
-starts vLLM following the commands in `scripts/vllm_server.sh`. It waits until
-both ports are open, exports `OPENAI_BASE_URL`, `OPENAI_API_KEY` and
-`RETRIEVER_BASE_URL` to `RUN_SCRIPT`, and shuts the servers down on exit.
-
 ---
 
 ## 📄 Input Data Format
@@ -157,29 +135,6 @@ never overwrite each other. Unless `--result_file` is given, the runner writes:
 | `<dataset>.jsonl` | One record per sample: `index`, `question`, `golden_answers`, `predicted_answer_in_tag`, `pipeline_result` (full per-iteration trace) |
 | `config.json`     | Snapshot of the CLI arguments                                                                                                         |
 | `run.log`         | Run log                                                                                                                               |
-
----
-
-## 🛠️ Key CLI Options
-
-| Option                 | Default                 | Description                                     |
-| ---------------------- | ----------------------- | ----------------------------------------------- |
-| `--input_file`         | required                | Input JSONL test file                           |
-| `--openai_base_url`    | `http://127.0.0.1:8001` | Shared OpenAI-compatible endpoint               |
-| `--model`              | —                       | Shared model name                               |
-| `--retriever_base_url` | `http://127.0.0.1:9100` | Retrieval service endpoint                      |
-| `--retriever_top_k`    | `5`                     | Documents retrieved per query                   |
-| `--max_iterations`     | `5`                     | Maximum intent/refine rounds                    |
-| `--batch_size`         | `512`                   | Samples processed per batch                     |
-| `--num_samples`        | all                     | Truncate the input to the first N samples       |
-| `--use_chat_template`  | off                     | Render prompts with the tokenizer chat template |
-| `--enable_thinking`    | off                     | Enable thinking mode (e.g. Qwen3)               |
-
-Per-agent overrides follow the pattern
-`--{intent_agent,query_agent,refine_agent}_{model,openai_base_url,openai_api_key,model_path,max_tokens,temperature,top_p,llm_timeout,use_chat_template,enable_thinking}`,
-falling back to the shared values.
-
-Run `python scripts/run_maps.py --help` for the complete list.
 
 ---
 
